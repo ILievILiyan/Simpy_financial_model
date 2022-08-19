@@ -8,17 +8,25 @@ total_financial_debt_of_group = 0
 list_of_co_debtors = []
 total_equity = 0
 total_assets = 0
+num_co_debtors = 0
+co_debtors = ""
 
 print(f'{Fore.GREEN}Hello! This is a scoring model for applying business loans!'
       f', please fill the following information!{Style.RESET_ALL}')
 
 name_of_company = input(f'{Fore.BLUE}Name of the Company{Style.RESET_ALL} applying for loan: ')
-num_of_companies_in_group = int(input(f'{Fore.BLUE}Number of companies in group{Style.RESET_ALL} '
-                                      '/including Borrower and Co-debtors only/: '))
-if num_of_companies_in_group > 1:
-    for index in range(num_of_companies_in_group - 1):
-        name_of_co_debtor = input(f'{Fore.BLUE}Name of Co-debtor{Style.RESET_ALL}: ')
-        list_of_co_debtors.append(name_of_co_debtor)
+
+co_debtors = input(f'Is there {Fore.BLUE}Co-debtors{Style.RESET_ALL}. Yes/No: ')
+while co_debtors.lower() != "Yes" or co_debtors.lower() != "no":
+    if co_debtors.lower() == "yes":
+        num_co_debtors = int(input('Enter the number of co-debtors: '))
+        for index in range(num_co_debtors):
+            name_of_co_debtor = input(f'{Fore.BLUE}Name of Co-debtor{index+1}{Style.RESET_ALL}: ')
+            list_of_co_debtors.append(name_of_co_debtor)
+        break
+    elif co_debtors.lower() == "no":
+        break
+    co_debtors = input(f'Is there {Fore.BLUE}Co-debtors{Style.RESET_ALL}. Yes/No: ')
 
 loan_amount_applying = float(input(f'The {Fore.GREEN}Amount of loan{Style.RESET_ALL} (in thousands BGN), '
                                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} wants to apply: '))
@@ -31,13 +39,13 @@ if stage_of_companies != 1:
     print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} It is acceptable risk status "Stage 1" only.')
     exit()
 
-if num_of_companies_in_group == 1:
+if num_co_debtors == 0:
     internal_best_rating_of_companies = int(input(f'The {Fore.GREEN}internal rating{Style.RESET_ALL} of '
                                                   f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL}: '))
 else:
     internal_best_rating_of_companies = int(input(f'Enter {Fore.GREEN}The Best internal rating{Style.RESET_ALL} of '
                                                   f'{Fore.BLUE}{name_of_company} and Co-debtors{Style.RESET_ALL}: '))
-
+num_of_companies_in_group = 1 + num_co_debtors
 if internal_best_rating_of_companies >= 6:
     print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} Best rating is above 6 and it is unacceptable.')
     exit()
@@ -97,15 +105,30 @@ else:
             if num_of_companies_in_group == 1:
                 print(
                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
-                    f'for the amount of {int(loan_amount_applying)} BGN')
+                    f'for the amount of {int(loan_amount_applying)}k BGN')
+                print(f'Summary of financial statement of the company:'
+                      f'\nTotal EBITDA: {total_EBITDA_of_group:.0f}k BGN'
+                      f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
+                      f'\nTotal EQUITY: {total_equity:.0f}k BGN'
+                      f'/{(total_equity/total_assets)*100:.0f}%/')
             elif num_of_companies_in_group == 2:
                 print(
                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} for '
-                    f'the amount of {int(loan_amount_applying)} BGN with Co-debtor {list_of_co_debtors}.')
+                    f'the amount of {int(loan_amount_applying)}k BGN with Co-debtor {list_of_co_debtors}.')
+                print(f'Summary of financial statement of the group:'
+                      f'\nTotal EBITDA: {total_EBITDA_of_group:.0f}k BGN'
+                      f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
+                      f'\nTotal EQUITY: {total_equity:.0f}k BGN'
+                      f'/{(total_equity/total_assets)*100:.0f}%/')
             elif num_of_companies_in_group > 2:
                 print(
                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
-                    f'for the amount of {int(loan_amount_applying)} BGN with Co-debtors: list(list_of_co_debtors).')
+                    f'for the amount of {int(loan_amount_applying)}k BGN with Co-debtors: {list_of_co_debtors}.')
+                print(f'Summary of financial statement of the group:'
+                      f'\nTotal EBITDA: {total_EBITDA_of_group:.0f}k BGN'
+                      f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
+                      f'\nTotal EQUITY: {total_equity:.0f}k BGN'
+                      f'/{(total_equity/total_assets)*100:.0f}%/')
         else:
             print(f'{Fore.RED}Not enough collateral value.{Style.RESET_ALL} Minimum coverage must be 80%.')
             exit()
