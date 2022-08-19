@@ -17,7 +17,7 @@ print(f'{Fore.GREEN}Hello! This is a scoring model for applying business loans!'
 name_of_company = input(f'{Fore.BLUE}Name of the Company{Style.RESET_ALL} applying for loan: ')
 
 co_debtors = input(f'Is there {Fore.BLUE}Co-debtors{Style.RESET_ALL}. Yes/No: ')
-while co_debtors.lower() != "Yes" or co_debtors.lower() != "no":
+while co_debtors.lower() != "yes" or co_debtors.lower() != "no":
     if co_debtors.lower() == "yes":
         num_co_debtors = int(input('Enter the number of co-debtors: '))
         for index in range(num_co_debtors):
