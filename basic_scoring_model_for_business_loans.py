@@ -78,7 +78,7 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 current_revenue = int(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of {Fore.BLUE} '
-                                              f'{name_of_company}{Style.RESET_ALL} for last year (in k BGN): '))
+                                            f'{name_of_company}{Style.RESET_ALL} for last year (in k BGN): '))
                 break
             except:
                 print("Revenue must be an integer!")
@@ -96,8 +96,8 @@ for index in range(num_of_companies_in_group):
             try:
                 # Existing loans:
                 financial_debt = int(input(f'The {Fore.GREEN}Total financial debt{Style.RESET_ALL} of '
-                                             f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL}'
-                                             f' for last year(in k BGN): '))
+                                           f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL}'
+                                           f' for last year(in k BGN): '))
                 break
             except:
                 print("Total financial debt must be an integer!")
@@ -105,8 +105,8 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 equity = int(input(f'{Fore.GREEN}Amount of EQUITY{Style.RESET_ALL} of '
-                                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} '
-                                     f'for last year(in k BGN): '))
+                                   f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} '
+                                   f'for last year(in k BGN): '))
                 break
             except:
                 print("EQUITY must be an integer!")
@@ -114,8 +114,8 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 assets = int(input(f'{Fore.GREEN}Total Assets{Style.RESET_ALL} of '
-                                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} '
-                                     f'for last year(in k BGN): '))
+                                   f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} '
+                                   f'for last year(in k BGN): '))
                 break
             except:
                 print("Total Assets must be an integer!")
