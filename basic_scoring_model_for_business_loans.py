@@ -3,7 +3,7 @@ from colorama import Style
 
 current_revenue = 0
 total_revenue_of_group = 0
-total_EBITDA_of_group = 0
+total_ebitda_of_group = 0
 total_financial_debt_of_group = 0
 list_of_co_debtors = []
 total_equity = 0
@@ -16,7 +16,6 @@ print(f'{Fore.GREEN}Hello! This is a scoring model for applying business loans!'
 
 name_of_company = input(f'{Fore.BLUE}Name of the Company{Style.RESET_ALL} applying for loan: ')
 
-co_debtors = input(f'Is there {Fore.BLUE}Co-debtors{Style.RESET_ALL}. Yes or No: ')
 while co_debtors.lower() != "yes" or co_debtors.lower() != "no":
     if co_debtors.lower() == "yes":
         num_co_debtors = int(input('Enter the number of co-debtors: '))
@@ -55,7 +54,7 @@ for index in range(num_of_companies_in_group):
         current_revenue = float(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of {Fore.BLUE} '
                                       f'{name_of_company}{Style.RESET_ALL} for last year (in thousands BGN): '))
         # Earning before interest, tax, depreciation and amortization:
-        EBITDA = float(input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of '
+        ebitda = float(input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of '
                              f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} for last year (in thousands BGN): '))
         # Existing loans:
         financial_debt = float(input(f'The {Fore.GREEN}total financial debt{Style.RESET_ALL} of '
@@ -71,7 +70,7 @@ for index in range(num_of_companies_in_group):
         current_revenue = float(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of '
                                       f'{Fore.BLUE}{list_of_co_debtors[index - 1]}{Style.RESET_ALL} '
                                       f'for last year (in thousands BGN): '))
-        EBITDA = float(input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of {Fore.BLUE}{list_of_co_debtors[index - 1]} '
+        ebitda = float(input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of {Fore.BLUE}{list_of_co_debtors[index - 1]} '
                              f'{Style.RESET_ALL} for last year (in thousands BGN): '))
         financial_debt = float(input(f'{Fore.GREEN}Total financial debt{Style.RESET_ALL} of '
                                      f'{Fore.BLUE}{list_of_co_debtors[index - 1]}{Style.RESET_ALL} '
@@ -85,7 +84,7 @@ for index in range(num_of_companies_in_group):
     total_equity += equity
     total_assets += assets
     total_revenue_of_group += current_revenue
-    total_EBITDA_of_group += EBITDA
+    total_ebitda_of_group += ebitda
     total_financial_debt_of_group += financial_debt
 
 if total_equity <= 0 or total_equity/total_assets <= 0.3:
@@ -95,7 +94,7 @@ if loan_amount_applying > total_revenue_of_group * 0.4:
     print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} Loan amount must be under 40% from Revenue.')
     exit()
 else:
-    if total_financial_debt_of_group / total_EBITDA_of_group > 4:
+    if total_financial_debt_of_group / total_ebitda_of_group > 4:
         print(f'{Fore.RED}Not applicable.{Style.RESET_ALL}'
               f' Over leveraged company/group. DEBT/EBITDA must bu under 4.')
         exit()
@@ -107,7 +106,7 @@ else:
                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
                     f'for the amount of {int(loan_amount_applying)}k BGN')
                 print(f'Summary of financial statement of the company:'
-                      f'\nTotal EBITDA: {total_EBITDA_of_group:.0f}k BGN'
+                      f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
                       f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
                       f'\nTotal EQUITY: {total_equity:.0f}k BGN'
                       f'/{(total_equity/total_assets)*100:.0f}%/')
@@ -116,7 +115,7 @@ else:
                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} for '
                     f'the amount of {int(loan_amount_applying)}k BGN with Co-debtor {list_of_co_debtors}.')
                 print(f'Summary of financial statement of the group:'
-                      f'\nTotal EBITDA: {total_EBITDA_of_group:.0f}k BGN'
+                      f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
                       f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
                       f'\nTotal EQUITY: {total_equity:.0f}k BGN'
                       f'/{(total_equity/total_assets)*100:.0f}%/')
@@ -125,7 +124,7 @@ else:
                     f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
                     f'for the amount of {int(loan_amount_applying)}k BGN with Co-debtors: {list_of_co_debtors}.')
                 print(f'Summary of financial statement of the group:'
-                      f'\nTotal EBITDA: {total_EBITDA_of_group:.0f}k BGN'
+                      f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
                       f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
                       f'\nTotal EQUITY: {total_equity:.0f}k BGN'
                       f'/{(total_equity/total_assets)*100:.0f}%/')
