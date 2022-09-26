@@ -1,6 +1,19 @@
 from colorama import Fore
 from colorama import Style
 
+
+def print_summary_of_financial_statement(company_or_group):
+    print(f'Summary of financial statement of the {company_or_group}:'
+          f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
+          f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
+          f'\nTotal EQUITY: {total_equity:.0f}k BGN'
+          f'/{(total_equity / total_assets) * 100:.0f}%/')
+
+
+def print_not_applicable(reason):
+    print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} {reason}')
+
+
 current_revenue = 0
 total_revenue_of_group = 0
 total_ebitda_of_group = 0
@@ -19,8 +32,8 @@ name_of_company = input(f'{Fore.BLUE}Name of the Company{Style.RESET_ALL} applyi
 while co_debtors.lower() != "yes" or co_debtors.lower() != "no":
     if co_debtors.lower() == "yes":
         num_co_debtors = int(input('Enter the number of co-debtors: '))
-        for index in range(num_co_debtors):
-            name_of_co_debtor = input(f'{Fore.BLUE}Name of Co-debtor{index + 1}{Style.RESET_ALL}: ')
+        for every_company in range(num_co_debtors):
+            name_of_co_debtor = input(f'{Fore.BLUE}Name of Co-debtor{every_company + 1}{Style.RESET_ALL}: ')
             list_of_co_debtors.append(name_of_co_debtor)
         break
     elif co_debtors.lower() == "no":
@@ -35,7 +48,7 @@ while True:
         print("Loan amount must be an integer!")
 
 if loan_amount_applying >= 2000:
-    print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} Amount must be under 2 000 000 BGN.')
+    print_not_applicable('Amount must be under 2 000 000 BGN.')
     exit()
 
 while True:
@@ -46,7 +59,7 @@ while True:
         print("Stage must be a digit!")
 
 if stage_of_companies != 1:
-    print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} It is acceptable risk status "Stage 1" only.')
+    print_not_applicable('It is acceptable risk status "Stage 1" only.')
     exit()
 
 if num_co_debtors == 0:
@@ -70,11 +83,12 @@ else:
 num_of_companies_in_group = 1 + num_co_debtors
 
 if internal_best_rating_of_companies >= 6:
-    print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} Best rating is above 6 and it is unacceptable.')
+    # Financial rating of the companies must be above 6
+    print_not_applicable('Best rating is above 6 and it is unacceptable.')
     exit()
 
-for index in range(num_of_companies_in_group):
-    if index == 0:
+for every_company in range(num_of_companies_in_group):
+    if every_company == 0:
         while True:
             try:
                 current_revenue = int(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of {Fore.BLUE} '
@@ -124,7 +138,7 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 current_revenue = float(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of '
-                                              f'{Fore.BLUE}{list_of_co_debtors[index - 1]}{Style.RESET_ALL} '
+                                              f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
                                               f'for last year (in k BGN): '))
                 break
             except:
@@ -133,7 +147,7 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 ebitda = float(
-                    input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of {Fore.BLUE}{list_of_co_debtors[index - 1]} '
+                    input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of {Fore.BLUE}{list_of_co_debtors[every_company - 1]} '
                           f'{Style.RESET_ALL} for last year (in k BGN): '))
                 break
             except:
@@ -142,7 +156,7 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 financial_debt = float(input(f'{Fore.GREEN}Total financial debt{Style.RESET_ALL} of '
-                                             f'{Fore.BLUE}{list_of_co_debtors[index - 1]}{Style.RESET_ALL} '
+                                             f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
                                              f'for last year (in k BGN): '))
                 break
             except:
@@ -151,7 +165,7 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 equity = float(input(f'{Fore.GREEN}Amount of EQUITY{Style.RESET_ALL} of '
-                                     f'{Fore.BLUE}{list_of_co_debtors[index - 1]}{Style.RESET_ALL} '
+                                     f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
                                      f'for last year (in k BGN): '))
                 break
             except:
@@ -160,7 +174,7 @@ for index in range(num_of_companies_in_group):
         while True:
             try:
                 assets = float(input(f'{Fore.GREEN}Total Assets{Style.RESET_ALL} of '
-                                     f'{Fore.BLUE}{list_of_co_debtors[index - 1]}{Style.RESET_ALL} '
+                                     f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
                                      f'for last year (in k BGN): '))
                 break
             except:
@@ -173,15 +187,14 @@ for index in range(num_of_companies_in_group):
     total_financial_debt_of_group += financial_debt
 
 if total_equity <= 0 or total_equity / total_assets <= 0.3:
-    print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} EQUITY is low.')
+    print_not_applicable('Low level of EQUITY: Must be above 30%')
     exit()
 if loan_amount_applying > total_revenue_of_group * 0.4:
-    print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} Loan amount must be under 40% from Revenue.')
+    print_not_applicable('Loan amount must be under 40% from Revenue.')
     exit()
 else:
     if total_financial_debt_of_group / total_ebitda_of_group > 4:
-        print(f'{Fore.RED}Not applicable.{Style.RESET_ALL}'
-              f' Over leveraged company/group. DEBT/EBITDA must bu under 4.')
+        print_not_applicable('Over leveraged company/group. DEBT/EBITDA must bu under 4.')
         exit()
     else:
         while True:
@@ -193,32 +206,19 @@ else:
 
         if collateral_valuation / loan_amount_applying > 0.8:
             if num_of_companies_in_group == 1:
-                print(
-                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
-                    f'for the amount of {int(loan_amount_applying)}k BGN')
-                print(f'Summary of financial statement of the company:'
-                      f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
-                      f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
-                      f'\nTotal EQUITY: {total_equity:.0f}k BGN'
-                      f'/{(total_equity / total_assets) * 100:.0f}%/')
+                print(f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
+                      f'for the amount of {int(loan_amount_applying)}k BGN')
+                print_summary_of_financial_statement("Company")
+
             elif num_of_companies_in_group == 2:
-                print(
-                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} for '
-                    f'the amount of {int(loan_amount_applying)}k BGN with Co-debtor {list_of_co_debtors}.')
-                print(f'Summary of financial statement of the group:'
-                      f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
-                      f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
-                      f'\nTotal EQUITY: {total_equity:.0f}k BGN'
-                      f'/{(total_equity / total_assets) * 100:.0f}%/')
+                print(f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} for '
+                      f'the amount of {int(loan_amount_applying)}k BGN with Co-debtor {list_of_co_debtors}.')
+                print_summary_of_financial_statement("Group")
+
             elif num_of_companies_in_group > 2:
-                print(
-                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
-                    f'for the amount of {int(loan_amount_applying)}k BGN with Co-debtors: {list_of_co_debtors}.')
-                print(f'Summary of financial statement of the group:'
-                      f'\nTotal EBITDA: {total_ebitda_of_group:.0f}k BGN'
-                      f'\nTotal Financial debt: {total_financial_debt_of_group:.0f}k BGN'
-                      f'\nTotal EQUITY: {total_equity:.0f}k BGN'
-                      f'/{(total_equity / total_assets) * 100:.0f}%/')
+                print(f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
+                      f'for the amount of {int(loan_amount_applying)}k BGN with Co-debtors: {list_of_co_debtors}.')
+                print_summary_of_financial_statement("Group")
         else:
             print(f'{Fore.RED}Not enough collateral value.{Style.RESET_ALL} Minimum coverage must be 80%.')
             exit()
