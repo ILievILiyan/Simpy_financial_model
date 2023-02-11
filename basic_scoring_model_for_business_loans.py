@@ -2,6 +2,7 @@ from colorama import Fore
 from colorama import Style
 
 """
+Financial model of scoring for approving of  business loans.
 next update - to upload financial covenants in dictionary (min.requirements).
 """
 
