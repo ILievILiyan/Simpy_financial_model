@@ -1,6 +1,15 @@
 from colorama import Fore
 from colorama import Style
 
+"""
+next update - to upload financial covenants in dictionary (min.requirements).
+"""
+# financial_covenants = {
+#     "DEBT_TO_EBITDA": 4,
+#     "EQUITY": 0.3,
+#      "COLLATERAL": 1,30
+# }
+
 
 def print_summary_of_financial_statement(company_or_group):
     print(f'Summary of financial statement of the {company_or_group}:'
@@ -13,6 +22,7 @@ def print_summary_of_financial_statement(company_or_group):
 def print_not_applicable(reason):
     print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} {reason}')
 
+MIN_AMOUNT_OF_LOAN_in_thousands = 2000
 
 current_revenue = 0
 total_revenue_of_group = 0
@@ -27,13 +37,20 @@ co_debtors = ""
 print(f'{Fore.GREEN}Hello! This is a scoring model for applying business loans!'
       f', please fill the following information!{Style.RESET_ALL}')
 
+# Enter the name of group/company who we will score!
 name_of_company = input(f'{Fore.BLUE}Name of the Company{Style.RESET_ALL} applying for loan: ')
 
-while co_debtors.lower() != "yes" or co_debtors.lower() != "no":
+options_yes_or_no = ["yes", "no"]
+
+# Answer if there is co-debtors (other companies); If yes -> we will sum their financial results
+while co_debtors.lower() not in options_yes_or_no:
     if co_debtors.lower() == "yes":
-        num_co_debtors = int(input('Enter the number of co-debtors: '))
-        for every_company in range(num_co_debtors):
-            name_of_co_debtor = input(f'{Fore.BLUE}Name of Co-debtor{every_company + 1}{Style.RESET_ALL}: ')
+        try:
+            num_co_debtors = int(input('Enter the number of co-debtors: '))
+        except ValueError:
+            print("You should enter number of co-debtors")
+        for company in range(num_co_debtors):
+            name_of_co_debtor = input(f'{Fore.BLUE}Name of Co-debtor{company + 1}{Style.RESET_ALL}: ')
             list_of_co_debtors.append(name_of_co_debtor)
         break
     elif co_debtors.lower() == "no":
@@ -44,10 +61,10 @@ while True:
     try:
         loan_amount_applying = int(input(f'The {Fore.GREEN}Amount of loan (in kBGN){Style.RESET_ALL} wants to apply: '))
         break
-    except:
+    except ValueError:
         print("Loan amount must be an integer!")
 
-if loan_amount_applying >= 2000:
+if loan_amount_applying >= MIN_AMOUNT_OF_LOAN_in_thousands:
     print_not_applicable('Amount must be under 2 000 000 BGN.')
     exit()
 
@@ -55,7 +72,7 @@ while True:
     try:
         stage_of_companies = int(input(f'The {Fore.GREEN}Risk stage status{Style.RESET_ALL} [1,2 or 3] of the Group: '))
         break
-    except:
+    except ValueError:
         print("Stage must be a digit!")
 
 if stage_of_companies != 1:
@@ -68,7 +85,7 @@ if num_co_debtors == 0:
             internal_best_rating_of_companies = int(input(f'The {Fore.GREEN}internal rating{Style.RESET_ALL} of '
                                                           f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL}: '))
             break
-        except:
+        except ValueError:
             print("Rating must be a digit!")
 else:
     while True:
@@ -77,43 +94,44 @@ else:
                 input(f'Enter {Fore.GREEN}The Best internal rating{Style.RESET_ALL} of '
                       f'{Fore.BLUE}{name_of_company} and Co-debtors{Style.RESET_ALL}: '))
             break
-        except:
+        except ValueError:
             print("Rating must be a digit!")
 
 num_of_companies_in_group = 1 + num_co_debtors
 
 if internal_best_rating_of_companies >= 6:
-    # Financial rating of the companies must be above 6
+    # Financial rating of the companies must be above 6. If its lower, scoring is not acceptable!
     print_not_applicable('Best rating is above 6 and it is unacceptable.')
     exit()
 
-for every_company in range(num_of_companies_in_group):
-    if every_company == 0:
+# We should check REVENUE of every company. We consolidate revenue of all companies in the group.
+for company in range(num_of_companies_in_group):
+    if company == 0:
         while True:
             try:
                 current_revenue = int(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of {Fore.BLUE} '
                                             f'{name_of_company}{Style.RESET_ALL} for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("Revenue must be an integer!")
 
         while True:
             try:
-                # Earning before interest, tax, depreciation and amortization:
+                # We should calculate group EBITDA(Earning before interest, tax, depreciation and amortization):
                 ebitda = int(input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of '
                                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("EBITDA must be an integer!")
 
         while True:
             try:
-                # Existing loans:
+                # We should calculate group existing loans in final assessment:
                 financial_debt = int(input(f'The {Fore.GREEN}Total financial debt{Style.RESET_ALL} of '
                                            f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL}'
                                            f' for last year(in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("Total financial debt must be an integer!")
 
         while True:
@@ -122,62 +140,64 @@ for every_company in range(num_of_companies_in_group):
                                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} '
                                    f'for last year(in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("EQUITY must be an integer!")
 
         while True:
             try:
+                # We need total ASSETS to calculate covenant EQUITY to total ASSETS
                 assets = int(input(f'{Fore.GREEN}Total Assets{Style.RESET_ALL} of '
                                    f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} '
                                    f'for last year(in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("Total Assets must be an integer!")
 
     else:
         while True:
             try:
+                #Revenue for co-debtors if there are co-debtors
                 current_revenue = float(input(f'{Fore.GREEN}Revenue{Style.RESET_ALL} of '
-                                              f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
+                                              f'{Fore.BLUE}{list_of_co_debtors[company - 1]}{Style.RESET_ALL} '
                                               f'for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("Revenue must be an integer!")
 
         while True:
             try:
                 ebitda = float(
-                    input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of {Fore.BLUE}{list_of_co_debtors[every_company - 1]} '
+                    input(f'{Fore.GREEN}EBITDA{Style.RESET_ALL} of {Fore.BLUE}{list_of_co_debtors[company - 1]} '
                           f'{Style.RESET_ALL} for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("EBITDA must be an integer!")
 
         while True:
             try:
                 financial_debt = float(input(f'{Fore.GREEN}Total financial debt{Style.RESET_ALL} of '
-                                             f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
+                                             f'{Fore.BLUE}{list_of_co_debtors[company - 1]}{Style.RESET_ALL} '
                                              f'for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("Total financial debt must be an integer!")
 
         while True:
             try:
                 equity = float(input(f'{Fore.GREEN}Amount of EQUITY{Style.RESET_ALL} of '
-                                     f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
+                                     f'{Fore.BLUE}{list_of_co_debtors[company - 1]}{Style.RESET_ALL} '
                                      f'for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("EQUITY must be an integer!")
 
         while True:
             try:
                 assets = float(input(f'{Fore.GREEN}Total Assets{Style.RESET_ALL} of '
-                                     f'{Fore.BLUE}{list_of_co_debtors[every_company - 1]}{Style.RESET_ALL} '
+                                     f'{Fore.BLUE}{list_of_co_debtors[company - 1]}{Style.RESET_ALL} '
                                      f'for last year (in k BGN): '))
                 break
-            except:
+            except ValueError:
                 print("Total Assets must be an integer!")
 
     total_equity += equity
@@ -186,13 +206,17 @@ for every_company in range(num_of_companies_in_group):
     total_ebitda_of_group += ebitda
     total_financial_debt_of_group += financial_debt
 
+# If group EQUITY is under 30% - this model is unacceptable
 if total_equity <= 0 or total_equity / total_assets <= 0.3:
     print_not_applicable('Low level of EQUITY: Must be above 30%')
     exit()
+
+# If loan proposal is above 40% from group REVENUE - model is unacceptable as well
 if loan_amount_applying > total_revenue_of_group * 0.4:
     print_not_applicable('Loan amount must be under 40% from Revenue.')
     exit()
 else:
+    # Check if total debt is above 4x to group EBITA.
     if total_financial_debt_of_group / total_ebitda_of_group > 4:
         print_not_applicable('Over leveraged company/group. DEBT/EBITDA must bu under 4.')
         exit()
@@ -201,9 +225,10 @@ else:
             try:
                 collateral_valuation = int(input(f'{Fore.GREEN}Liquidity value of collateral: '))
                 break
-            except:
+            except ValueError:
                 print("Liquidity value of collateral must be an integer!")
 
+        # Check if there is enough collateral
         if collateral_valuation / loan_amount_applying > 0.8:
             if num_of_companies_in_group == 1:
                 print(f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
