@@ -4,6 +4,7 @@ from colorama import Style
 """
 next update - to upload financial covenants in dictionary (min.requirements).
 """
+
 # financial_covenants = {
 #     "DEBT_TO_EBITDA": 4,
 #     "EQUITY": 0.3,
