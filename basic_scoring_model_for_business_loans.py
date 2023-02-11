@@ -11,7 +11,7 @@ next update - to upload financial covenants in dictionary (min.requirements).
 #     "EQUITY": 0.3,
 #      "COLLATERAL": 0.80
 # }
-
+MIN_AMOUNT_OF_LOAN_in_thousands = 2000
 
 def print_summary_of_financial_statement(company_or_group):
     print(f'Summary of financial statement of the {company_or_group}:'
@@ -24,7 +24,6 @@ def print_summary_of_financial_statement(company_or_group):
 def print_not_applicable(reason):
     print(f'{Fore.RED}Not applicable.{Style.RESET_ALL} {reason}')
 
-MIN_AMOUNT_OF_LOAN_in_thousands = 2000
 
 current_revenue = 0
 total_revenue_of_group = 0
@@ -239,12 +238,12 @@ else:
 
             elif num_of_companies_in_group == 2:
                 print(f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} for '
-                      f'the amount of {int(loan_amount_applying)}k BGN with Co-debtor {list_of_co_debtors}.')
+                      f'the amount of {int(loan_amount_applying)}k BGN with Co-debtor {", ".join(list_of_co_debtors)}.')
                 print_summary_of_financial_statement("Group")
 
             elif num_of_companies_in_group > 2:
                 print(f'{Fore.BLUE}{name_of_company}{Style.RESET_ALL} is {Fore.GREEN}approved{Style.RESET_ALL} '
-                      f'for the amount of {int(loan_amount_applying)}k BGN with Co-debtors: {list_of_co_debtors}.')
+                      f'for the amount of {int(loan_amount_applying)}k BGN with Co-debtors: {", ".join(list_of_co_debtors)}.')
                 print_summary_of_financial_statement("Group")
         else:
             print(f'{Fore.RED}Not enough collateral value.{Style.RESET_ALL} Minimum coverage must be 80%.')
